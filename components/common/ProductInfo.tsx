@@ -3,8 +3,8 @@
 import { useState } from "react";
 // import HeartFavorite from "./HeartFavorite";
 import { MinusCircle, PlusCircle } from "lucide-react";
-
-// import useCart from "@/lib/hooks/useCart";
+import HeartFavorite from "./HeartFavorite";
+import useCart from "@/hooks/useCart";
 
 const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
   const [selectedColor, setSelectedColor] = useState<string>(
@@ -15,13 +15,13 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
   );
   const [quantity, setQuantity] = useState<number>(1);
 
-//   const cart = useCart();
+  const cart = useCart();
 
   return (
     <div className="max-w-[400px] flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <p className="text-heading3-bold leading-[130%]">{productInfo.title}</p>
-        {/* <HeartFavorite product={productInfo} /> */}
+        <HeartFavorite product={productInfo} />
       </div>
 
       <div className="flex gap-2">
@@ -90,14 +90,14 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
       </div>
 
       <button
-        className="outline text-base-bold py-3 rounded-lg hover:bg-black hover:text-white"
+        className="outline text-base-bold py-3 rounded-lg hover:bg-black hover:text-white cursor-pointer"
         onClick={() => {
-        //   cart.addItem({
-        //     item: productInfo,
-        //     quantity,
-        //     color: selectedColor,
-        //     size: selectedSize,
-        //   });
+          cart.addItem({
+            item: productInfo,
+            quantity,
+            color: selectedColor,
+            size: selectedSize,
+          });
         }}
       >
         Add To Cart
