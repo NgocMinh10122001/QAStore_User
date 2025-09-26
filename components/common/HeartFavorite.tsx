@@ -32,7 +32,7 @@ const HeartFavorite = ({ product }: HeartFavoriteProps) => {
     }
   };
 
-  const { data } = useSWR([`/api/users`], getUser,{dedupingInterval:3600,});
+  const { data } = useSWR([`/api/users`], getUser,{dedupingInterval: 3600});
 
   useEffect(() => {
     if (data) {

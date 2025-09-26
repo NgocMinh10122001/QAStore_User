@@ -13,7 +13,8 @@ interface CartStore {
     cartItems : CartItem[],
     addItem : (item : CartItem) => void,
     removeItem : (_id : string) => void,
-    changeQuantity: (_id : string,newQuantity : number) => void,
+    increaseQuantity: (_id : string) => void,
+    decreaseQuantity: (_id : string) => void,
     clearCart : () => void
 }
 
@@ -36,10 +37,19 @@ const useCart = create(persist<CartStore>((set, get) => ({
         set({cartItems : [...newCartItems]})
         toast.success("Item removed from cart",{ icon: "🛒" })
     },
-    changeQuantity : (_id, newQuantity) => {
+    increaseQuantity : (_id) => {
         const newCartItems = get().cartItems.map((cartItem) => 
             {
-                if(cartItem.item._id === _id) return {...cartItem, quantity:newQuantity }
+                if(cartItem.item._id === _id) return {...cartItem, quantity: cartItem.quantity + 1 }
+                return cartItem
+            })
+        
+        set({cartItems : [...newCartItems]})
+    },
+    decreaseQuantity : (_id) => {
+        const newCartItems = get().cartItems.map((cartItem) => 
+            {
+                if(cartItem.item._id === _id) return {...cartItem, quantity:cartItem.quantity <= 1 ? cartItem.quantity : cartItem.quantity - 1 }
                 return cartItem
             })
         

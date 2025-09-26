@@ -1,21 +1,23 @@
 "use client";
 
-
 import Cart from "@/components/common/Cart";
 import useCart from "@/hooks/useCart";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 const ShoppingCart = () => {
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
 
-//   const total = cart.cartItems.reduce(
-//     (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
-//     0
-//   );
-//   const totalRounded = parseFloat(total.toFixed(2));
+  const totalRounded = useMemo(() => {
+    const kq = cart.cartItems.reduce((acc, cartItem) => {
+      return acc + cartItem.item.price * cartItem.quantity;
+    }, 0);
+    const total = parseFloat(kq.toFixed(2));
+    return total;
+  }, [cart.cartItems]);
 
   const customer = {
     clerkId: user?.id,
@@ -23,23 +25,23 @@ const ShoppingCart = () => {
     name: user?.fullName,
   };
 
-//   const handleCheckout = async () => {
-//     try {
-//       if (!user) {
-//         router.push("sign-in");
-//       } else {
-//         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-//           method: "POST",
-//           body: JSON.stringify({ cartItems: cart.cartItems, customer }),
-//         });
-//         const data = await res.json();
-//         window.location.href = data.url;
-//         console.log(data);
-//       }
-//     } catch (err) {
-//       console.log("[checkout_POST]", err);
-//     }
-//   };
+    const handleCheckout = async () => {
+      try {
+        if (!user) {
+          router.push("sign-in");
+        } else {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
+            method: "POST",
+            body: JSON.stringify({ cartItems: cart.cartItems, customer }),
+          });
+          const data = await res.json();
+          window.location.href = data.url;
+          console.log(data);
+        }
+      } catch (err) {
+        console.log("[checkout_POST]", err);
+      }
+    };
 
   return (
     <div className="flex gap-20 py-16 px-10 max-lg:flex-col max-sm:px-3">
@@ -52,7 +54,13 @@ const ShoppingCart = () => {
         ) : (
           <div>
             {cart.cartItems.map((cartItem) => (
-              <Cart key={cartItem.item._id} cartItem = {cartItem}/>
+              <Cart
+                key={cartItem.item._id}
+                cartItem={cartItem}
+                increaseQuantity={cart.increaseQuantity}
+                decreaseQuantity={cart.decreaseQuantity}
+                removeItem={cart.removeItem}
+              />
             ))}
           </div>
         )}
@@ -67,13 +75,11 @@ const ShoppingCart = () => {
         </p>
         <div className="flex justify-between text-body-semibold text-white">
           <span>Total Amount</span>
-          <span>$ 
-            {/* {totalRounded} */}
-            </span>
+          <span>${totalRounded}</span>
         </div>
         <button
           className="border rounded-lg text-body-bold bg-black py-3 w-full hover:bg-white text-white hover:text-black"
-        //   onClick={handleCheckout}
+            onClick={handleCheckout}
         >
           Proceed to Checkout
         </button>
