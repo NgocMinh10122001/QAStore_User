@@ -11,6 +11,7 @@ const ProductDetails: React.FC<IProductDetailsProps> = async ({
   productDetails,
   relatedProducts,
 }) => {
+  console.log("check", relatedProducts)
   return (
     <>
       <div className="flex justify-center items-start gap-16 py-10 px-5 max-md:flex-col max-md:items-center">
@@ -21,6 +22,7 @@ const ProductDetails: React.FC<IProductDetailsProps> = async ({
       <div className="flex flex-col items-center px-10 py-5 max-md:px-3">
         <p className="text-heading3-bold">Related Products</p>
         <div className="flex flex-wrap gap-16 mx-auto mt-8">
+          {!relatedProducts || relatedProducts.length === 0 && <p className="text-black">No related products</p>}
           {relatedProducts &&
             relatedProducts.length > 0 &&
             relatedProducts?.map((product: ProductType) => (

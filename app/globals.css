@@ -154,6 +154,10 @@
   font-weight: 500;
 }
 
+@utility custom-shadown{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -197,6 +201,12 @@
   }
 }
 
-html,body,:root {
+html,:root {
   height: 100%;
 }
+
+body {
+  height: fit-content;
+}
+
+

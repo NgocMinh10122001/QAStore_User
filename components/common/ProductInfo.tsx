@@ -3,7 +3,6 @@
 import { useState } from "react";
 // import HeartFavorite from "./HeartFavorite";
 import { MinusCircle, PlusCircle } from "lucide-react";
-import HeartFavorite from "./HeartFavorite";
 import useCart from "@/hooks/useCart";
 
 const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
@@ -21,7 +20,6 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
     <div className="max-w-[400px] flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <p className="text-heading3-bold leading-[130%]">{productInfo.title}</p>
-        <HeartFavorite product={productInfo} />
       </div>
 
       <div className="flex gap-2">
@@ -43,7 +41,7 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
             {productInfo.colors.map((color, index) => (
               <p
                 key={index}
-                className={`border border-black px-2 py-1 rounded-lg cursor-pointer ${
+                className={`border border-black px-4 py-1 rounded-lg cursor-pointer ${
                   selectedColor === color && "bg-black text-white"
                 }`}
                 onClick={() => setSelectedColor(color)}
@@ -62,7 +60,7 @@ const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
             {productInfo.sizes.map((size, index) => (
               <p
                 key={index}
-                className={`border border-black px-2 py-1 rounded-lg cursor-pointer ${
+                className={`border border-black px-4 py-1 rounded-lg cursor-pointer  ${
                   selectedSize === size && "bg-black text-white"
                 }`}
                 onClick={() => setSelectedSize(size)}

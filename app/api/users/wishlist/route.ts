@@ -3,41 +3,39 @@ import { connectToDB } from "@/lib/mongoDB";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req : NextRequest) => {
+export const POST = async (req: NextRequest) => {
+  try {
+    const { userId } = await auth();
 
-try {
+    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
 
-    const {userId} = await auth()
+    await connectToDB();
 
-    if(!userId) return new NextResponse("Unauthorized", {status: 401})
+    const user = await User.findOne({ clerkId: userId });
 
-    await connectToDB()
+    if (!user) return new NextResponse("User not found", { status: 404 });
 
-    const user = await User.findOne({clerkId : userId})
+    const { productId } = await req.json();
 
-    if(!user) return new NextResponse("User not found", {status: 404})
+    if (!productId)
+      return new NextResponse("Product ID is required", { status: 400 });
 
-    const {productId} = await req.json()
+    const isLiked = await user.wishlist.includes(productId);
 
-    if(!productId) return new NextResponse("Product ID is required", {status: 400})
-
-    const isLiked = await user.wishlist.includes(productId)
-
-    if(isLiked) {
-        user.wishlist = await user.wishlist.filter((id:string) => id !== productId)
-    }else {
-       await user.wishlist.push(productId)
+    if (isLiked) {
+      user.wishlist = await user.wishlist.filter(
+        (id: string) => id !== productId
+      );
+    } else {
+      await user.wishlist.push(productId);
     }
 
-    await user.save()
+    await user.save();
 
-    return NextResponse.json(user, {status: 200})
-
-    
-} catch (error) {
+    return NextResponse.json(user, { status: 200 });
+  } catch (error) {
     console.log("wishlist_POST", error);
     return new NextResponse("Internal error", { status: 500 });
-}
+  }
+};
 
-}
-    

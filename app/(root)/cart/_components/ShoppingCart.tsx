@@ -78,7 +78,7 @@ const ShoppingCart = () => {
           <span>${totalRounded}</span>
         </div>
         <button
-          className="border rounded-lg text-body-bold bg-black py-3 w-full hover:bg-white text-white hover:text-black"
+          className="border cursor-pointer rounded-lg text-body-bold bg-black py-3 w-full hover:bg-white text-white hover:text-black"
             onClick={handleCheckout}
         >
           Proceed to Checkout

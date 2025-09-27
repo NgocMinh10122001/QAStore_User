@@ -1,5 +1,6 @@
 "use client"
 
+import { getUser } from "@/lib/actions/actions";
 import { useUser } from "@clerk/nextjs";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,22 +18,7 @@ const HeartFavorite = ({ product }: HeartFavoriteProps) => {
 
   const { user } = useUser();
 
-  const getUser = async () => {
-    try {
-      const res = await fetch(`/api/users`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      return await res.json();
-    } catch (error) {
-      console.log("get user in client failed, try again", error);
-    }
-  };
-
-  const { data } = useSWR([`/api/users`], getUser,{dedupingInterval: 3600});
+  const { data, mutate } = useSWR([`/api/users`], getUser);
 
   useEffect(() => {
     if (data) {
@@ -46,31 +32,34 @@ const HeartFavorite = ({ product }: HeartFavoriteProps) => {
     e.preventDefault();
 
     try {
-      if (!user) {
-        router.push("/sign-in");
-        return;
-      } else {
-        const res = await fetch(`/api/users/wishlist`, {
+       const res = await fetch(`/api/users/wishlist`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ productId: product._id }),
         });
-
-        const data = await res.json();
-
-        setIsLiked(data.wishlist.includes(product._id));
-      }
+        const data = res.json()
+        mutate(data)
     } catch (error) {
       console.log("get user in client failed, try again", error);
     }
   };
+  
 
   return (
-    <button onClick={handleLike} className="cursor-pointer">
+    <div onClick={() => {
+         if (!user) {
+        router.push("/sign-in");
+        return;
+      } else {
+            setIsLiked(!isLiked)
+        }
+    }}>
+        <button onClick={handleLike} className="cursor-pointer">
       <Heart fill={`${isLiked ? "red" : "white"}`} />
     </button>
+    </div>
   );
 };
 

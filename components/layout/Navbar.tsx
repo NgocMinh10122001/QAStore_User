@@ -59,6 +59,11 @@ const Navbar = () => {
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if(e.key === "Enter") {
+              router.push(`/search/${query}`)
+            }
+          }}
         />
         <button
           disabled={query === ""}
@@ -110,10 +115,10 @@ const Navbar = () => {
         )}
 
         {user ? (
-          <UserButton afterSignOutUrl="/sign-in" />
+          <div className="w-8 h-8 flex items-center justify-center"><UserButton afterSignOutUrl="/sign-in"/></div>
         ) : (
-          <Link href="/sign-in">
-            <CircleUserRound />
+          <Link href="/sign-in" >
+            <CircleUserRound size={28}/>
           </Link>
         )}
       </div>

@@ -7,16 +7,16 @@ const page = async ({ params }: { params: Promise<{ productId: string }> }) => {
 
   const [
     productDetails,
-    // relatedProducts
+    relatedProducts
   ] = await Promise.all([
     getProductDetails(productId),
-    // getRelatedProducts(productId),
+    getRelatedProducts(productId),
   ]);
 
   return (
     <ProductDetails
       productDetails={productDetails}
-      // relatedProducts={relatedProducts}
+      relatedProducts={relatedProducts}
     />
   );
 };
