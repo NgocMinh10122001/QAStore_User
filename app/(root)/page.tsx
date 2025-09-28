@@ -16,7 +16,7 @@ export default async function Home() {
         <Image
         src="/images/home/banner.jpg"
         alt="banner"
-        className="mx-auto my-10 rounded-lg w-screen"
+        className="mx-auto my-10 rounded-lg w-screen max-sm:h-52 max-sm:object-cover"
         width={2000}
         height={1000}
       />
